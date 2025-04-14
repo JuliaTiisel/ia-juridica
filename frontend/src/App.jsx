@@ -11,7 +11,7 @@ import {
   Stats,
   Testimonials
 } from './components/index.js'
-import Chat from './components/Chat.jsx'  // Importe a página Chat criada anteriormente
+import Chat from './components/Chat.jsx'
 import styles from './style.js'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
