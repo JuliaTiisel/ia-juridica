@@ -1,7 +1,6 @@
 // Chat.jsx
 import React, { useState } from 'react'
 import styles, { layout } from '../style.js'
-import Button from './Button.jsx'
 
 const Chat = () => {
   const [documents, setDocuments] = useState(null)
@@ -13,57 +12,74 @@ const Chat = () => {
     setDocuments(file)
   }
 
-  // Função para simular o envio de mensagem e receber uma resposta do chatbot
+  // Simula o envio de mensagem e a resposta do chatbot
   const sendMessage = () => {
-    if (!input) return
+    if (!input.trim()) return
     const userMessage = { sender: 'user', text: input }
-    setMessages(prevMessages => [...prevMessages, userMessage])
-    // Aqui você integraria a API da IA Jurídica para obter uma resposta
+    setMessages(prev => [...prev, userMessage])
+    // Integre aqui a API da IA Jurídica para obter uma resposta real
     const botResponse = { sender: 'bot', text: 'Resposta da IA Jurídica...' }
-    setMessages(prevMessages => [...prevMessages, botResponse])
+    setMessages(prev => [...prev, botResponse])
     setInput('')
   }
 
   return (
-    <div className={`${layout.section} p-6`}>
-      <h2 className={styles.heading2}>Chat com a IA Jurídica</h2>
-      <p className={`${styles.paragraph} mt-4`}>
-        Insira seus documentos e converse com nosso assistente para criar petições e analisar casos.
-      </p>
+    <div className={`${styles.paddingX} ${styles.flexCenter} min-h-screen bg-black-gradient-2 py-10`}>
+      <div className={`${layout.section} bg-primary rounded-2xl p-10 shadow-2xl max-w-4xl w-full`}>
+        <h2 className={`${styles.heading2} text-center mb-6`}>Chat com a IA Jurídica</h2>
+        <p className={`${styles.paragraph} text-center mb-8`}>
+          Insira seus documentos e converse com nosso assistente para criar petições e analisar casos.
+        </p>
 
-      <div className="mt-6">
-        <label className={`${styles.paragraph} block mb-2`} htmlFor="documentUpload">
-          Insira seus documentos:
-        </label>
-        <input
-          id="documentUpload"
-          type="file"
-          onChange={handleDocumentUpload}
-          className="mb-4 p-2 border rounded w-full"
-        />
-      </div>
-
-      <div className="bg-white rounded-[10px] p-4 shadow-md mt-6">
-        <div className="h-64 overflow-y-auto mb-4">
-          {messages.map((msg, index) => (
-            <div key={index} className={`mb-2 ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
-              <span className={`inline-block p-2 rounded ${msg.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'}`}>
-                {msg.text}
-              </span>
-            </div>
-          ))}
+        {/* Seção de Upload de Documentos */}
+        <div className="mb-8">
+          <label className={`${styles.paragraph} block mb-2 text-white`} htmlFor="documentUpload">
+            Insira seus documentos:
+          </label>
+          <div className="flex items-center space-x-4">
+            <label
+              htmlFor="documentUpload"
+              className="cursor-pointer py-2 px-6 bg-blue-500 hover:bg-blue-600 transition text-white font-semibold rounded-lg">
+              Escolher Arquivo
+            </label>
+            {documents && (
+              <p className="text-white font-medium">{documents.name}</p>
+            )}
+            <input
+              id="documentUpload"
+              type="file"
+              onChange={handleDocumentUpload}
+              className="hidden"
+            />
+          </div>
         </div>
-        <div className="flex">
+
+        {/* Área de Conversa */}
+        <div className="mb-8">
+          {/* Removemos o fundo branco para evitar o "quadrado" indesejado */}
+          <div className="rounded-lg p-6 max-h-80 overflow-y-auto space-y-4">
+            {messages.map((msg, index) => (
+              <div key={index} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} px-2`}>
+                <div className={`p-4 rounded-lg max-w-md break-words ${msg.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'}`}>
+                  {msg.text}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Campo de Entrada e Botão de Envio */}
+        <div className="flex mt-6">
           <input
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={e => setInput(e.target.value)}
             placeholder="Digite sua mensagem..."
-            className="flex-1 p-2 border rounded-l outline-none"
+            className="flex-1 p-4 border border-gray-300 rounded-l-lg outline-none"
           />
           <button
             onClick={sendMessage}
-            className="py-2 px-4 bg-blue-gradient text-white rounded-r outline-none"
+            className="py-4 px-8 bg-blue-gradient text-white rounded-r-lg outline-none transition hover:opacity-90"
           >
             Enviar
           </button>
